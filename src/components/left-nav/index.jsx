@@ -1,6 +1,7 @@
 
 import './index.less'
 import logo from '../../assets/images/logo.png'
+import hai from '../../assets/images/hai1.jpg'
 import menuConfig from '../../config/menuConfig'
 
 import React,{Component} from 'react'
@@ -125,7 +126,7 @@ class LeftNav extends Component {
             <div className='left-nav'>
 
                 <Link to='/' className='left-nav-header'>
-                    <img src={logo} alt="logo"/>
+                    <img src={hai} alt="logo"/>
                     <h1>DD后台</h1>
                 </Link>
 

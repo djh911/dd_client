@@ -16,9 +16,11 @@ export default function ajax(url,data = {},type='GET') {
         let promise
         //1.执行异步ajax请求
         if(type === 'GET'){
+           // console.log(data)
             promise = axios.get(url,{
                 params:data
             })
+            
         }else{
             promise = axios.post(url,data)
         }
