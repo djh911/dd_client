@@ -35,6 +35,7 @@ class AddForm extends Component {
                     {
                         getFieldDecorator('parentId',{
                             initialValue:parentId
+                            
                         })(
                             <Select>
                                 <Option value='0' key='0'>一级分类</Option>
@@ -56,7 +57,10 @@ class AddForm extends Component {
                 <Item>
                     {
                         getFieldDecorator('categoryName',{
-                            initialValue:''
+                            initialValue:'',
+                            rules:[
+                                {required:true,message:'分类名称必须输入'}
+                            ]
                         })(
                             <Input placeholder="请输入分类名称" />
 

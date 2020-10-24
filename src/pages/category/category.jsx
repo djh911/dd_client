@@ -56,6 +56,7 @@ export default class Category extends Component {
         })
 
     }
+
     //显示一级分类列表
     showCategorys = () => {
         this.setState({
@@ -73,7 +74,7 @@ export default class Category extends Component {
             loading: true
         })
         parentId = parentId || this.state.parentId
-        const result = await reqCategorys(parentId )
+        const result = await reqCategorys(parentId)
 
         //在发送请求后，更新loading状态
         this.setState({
@@ -113,74 +114,68 @@ export default class Category extends Component {
     }
 
     //添加分类
-    addCategory = async() => {
-        //1.隐藏对话框
-        this.setState({
-            showStatus: 0
-        })
-        
-        //
+    addCategory = () => {
 
-        //2.准备数据，发送请求，添加更新分类
-        const {categoryName,parentId} = this.form.getFieldsValue()
-        //const parentId = this.state.parentId
-        // console.log({
-        //     parentId,
-        //     categoryName
-        // })
-        this.form.resetFields()
-        const result = await reqAddCategory(parentId,categoryName)
-        console.log(result)
-        if(result.status === 0) {
-             //3.重新显示列表
-
-             if(parentId === this.state.parentId) {
-                this.getCategorys()
-             }else if(parentId === '0') {
+        this.form.validateFields( async (err, values) => {
+            if (!err) {
+                //1.隐藏对话框
+               // console.log('表单验证成功')
                 this.setState({
-                    parentId:"0"
-                },() => {
-                    this.getCategorys()
+                    showStatus: 0
                 })
-             }
-             
-        }
 
+                //2.准备数据，发送请求，添加更新分类
+                const { categoryName, parentId } = this.form.getFieldsValue()
+                this.form.resetFields()
+                const result = await reqAddCategory(parentId, categoryName)
+                console.log(result)
+                if (result.status === 0) {
+                    //3.重新显示列表
+
+                    if (parentId === this.state.parentId) {
+                        this.getCategorys()
+                    } else if (parentId === '0') {
+                        this.setState({
+                            parentId: "0"
+                        }, () => {
+                            this.getCategorys()
+                        })
+                    }
+
+                }
+            }
+        })
     }
 
     //更新分类
-    updateCategory = async () => {
+    updateCategory = () => {
 
-        //1.隐藏对话框
-        this.setState({
-            showStatus: 0
+        this.form.validateFields(async (err, values) => {
+            if (!err) {
+                //1.隐藏对话框
+                this.setState({
+                    showStatus: 0
+                })
+
+                //准备数据
+                const categoryId = this.category._id
+                const categoryName = this.form.getFieldsValue().categoryName
+
+
+                // 重置表单
+                this.form.resetFields()
+
+
+                //2.发送请求更新分类
+                const result = await reqUpdateCategory(categoryId, categoryName)
+                // console.log(result)
+                if (result.status === 0) {
+                    //3.重新显示列表
+                    this.getCategorys()
+
+                }
+            }
         })
-
-        //准备数据
-        const categoryId = this.category._id
-        const categoryName = this.form.getFieldsValue().categoryName
-        // console.log({
-        //     categoryId,
-        //     categoryName
-        // })
-
-        // 重置表单
-        this.form.resetFields()
-
-
-        //2.发送请求更新分类
-        const result = await reqUpdateCategory(categoryId, categoryName)
-        // console.log(result)
-        if (result.status === 0) {
-            //3.重新显示列表
-            this.getCategorys()
-
-        }
-
-
-
-
-
     }
 
     //显示添加的对话框
@@ -199,17 +194,20 @@ export default class Category extends Component {
         })
     }
 
+
+
     componentWillMount() {
         this.getColumns()
     }
 
     componentDidMount() {
         this.getCategorys()
+        //
     }
 
     render() {
+
         const category = this.category || {} //如果没有，指定空对象
-        //console.log(category)
         const { categorys, loading, subCategorys, parentId, parentName, showStatus } = this.state
         const columns = this.columns
         const title = parentId === "0" ? '一级分类列表' : (
@@ -236,7 +234,7 @@ export default class Category extends Component {
                     pagination={{ pageSize: 5, showQuickJumper: true, showSizeChanger: true }}
                     loading={loading}
                     dataSource={parentId === "0" ? categorys : subCategorys}
-                    columns={this.columns}
+                    columns={columns}
                 />
                 <Modal
                     title="添加分类"
