@@ -51,7 +51,7 @@ export const reqUpdateCategory = (categoryId, categoryName) => ajax(BaseUrl + '/
 
 //6.获取商品分页列表
 export const reqProducts = (pageNum, pageSize) => {
-    console.log(pageNum, pageSize)
+    //console.log(pageNum, pageSize)
     return ajax(BaseUrl + '/manage/product/list', { pageNum, pageSize })
 }
 
@@ -70,3 +70,6 @@ export const reqCategory = (categoryId) => ajax('/manage/category/info',{categor
 
 //9.对商品进行上架/下架处理
 export const reqUpdateStatus = (productId,status) => ajax('/manage/product/updateStatus',{productId,status},'POST')
+
+//10.删除商品图片
+export const reqDeleteImg = (name) => ajax('/manage/img/delete',{name},'POST')

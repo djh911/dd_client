@@ -57,7 +57,7 @@ export default class ProductHome extends Component {
 
                     return (
                         <span>
-                            <LinkButton>修改</LinkButton>
+                            <LinkButton onClick={() =>this.props.history.push('/product/addupdate',product)}>修改</LinkButton>
                             <LinkButton onClick={() =>this.props.history.push('/product/details',{product})}>详情</LinkButton>
                         </span>
                     )
@@ -98,7 +98,7 @@ export default class ProductHome extends Component {
             loading: false
         })
         if (result.status === 0) {
-            console.log(result)
+            //console.log(result)
             const { list, total } = result.data
             this.setState({
                 total,
@@ -142,7 +142,7 @@ export default class ProductHome extends Component {
             </span>
         )
         const extra = (
-            <Button type='primary'>
+            <Button type='primary' onClick = {() => this.props.history.push('/product/addupdate')}>
                 <Icon type='plus' />
                 添加商品
             </Button>
