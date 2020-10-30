@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Card, Form, Input, Icon, Cascader, Upload, Button } from 'antd'
+import { Card, Form, Input, Icon, Cascader, Upload, Button,message } from 'antd'
 
 import LinkButton from '../../components/link-button'
-import { reqCategorys } from '../../api/index'
+import { reqCategorys,reqAddProduct,reqUpdateProduct } from '../../api/index'
 import PicturesWall from './pictures-wall'
+import RichTextEditor from './rich-text-editor'
 
 const { TextArea } = Input
 const { Item } = Form
@@ -15,10 +16,11 @@ class ProductAddUpadte extends Component {
         options: [],
     };
 
-    constructor(props){
+    constructor(props) {
         super(props)
         //创建用来保存ref标识的标签对象的容器
         this.pw = React.createRef()
+        this.editor = React.createRef()
     }
 
     //接收一个categorys,生成options数组，并更新状态
@@ -72,11 +74,48 @@ class ProductAddUpadte extends Component {
     //整个表单提交的提交函数
     submit = () => {
         //进行表单验证
-        this.props.form.validateFields((error, values) => {
+        this.props.form.validateFields( async (error, values) => {
             if (!error) {
+               
+               
+
+                //1.收集数据，并封装为product对象
+                let {name,desc,price,categoryIds} = values
+                //price = parseInt(price)
+                let pCategoryId,categoryId
+                if(categoryIds.length === 1) {
+                    pCategoryId = 0
+                    categoryId = categoryIds[0]
+                } else {
+                    pCategoryId = categoryIds[0]
+                    categoryId = categoryIds[1]
+                }
                 const imgs = this.pw.current.getImages()
-                console.log(values,imgs)
-                alert('发送ajax请求')
+                const detail = this.editor.current.getDetail()
+                let product = {name,desc,price,pCategoryId,categoryId,imgs,detail}
+                let result
+                if(this.isUpdate) {
+                    product._id = this.product._id
+                    //调用接口请求函数，进行商品的更新
+                    result = await reqUpdateProduct(product)
+                } else {
+                    //调用接口请求函数，进行商品的添加
+                    console.log(product)
+                    result = await reqAddProduct(product)
+                }
+                if(result.status===0 ) {
+                    console.log(result)
+                    message.success(this.isUpdate ? '商品更新成功' : '商品添加成功')
+                    this.props.history.goBack()
+                } else {
+                    console.log(result)
+                    message.error(this.isUpdate ? '商品更新失败' : '商品添加失败')
+                }
+
+                
+
+
+                //3.根据结果显示提示信息
             }
         })
     }
@@ -140,10 +179,10 @@ class ProductAddUpadte extends Component {
     render() {
 
         const { isUpdate, product } = this
-        
-        
-        const { pCategoryId, categoryId } = product
-        const imgs = []
+
+
+        const { pCategoryId, categoryId , imgs , detail } = product
+        //const imgs = []
         const { options } = this.state
         //指定Item布局的配置对象
         const formItemLayout = {
@@ -230,8 +269,10 @@ class ProductAddUpadte extends Component {
                     <Item label='商品图片' >
                         <PicturesWall ref={this.pw} imgs={imgs}></PicturesWall>
                     </Item>
-                    <Item label='商品详情' >
-                        <div>商品详情</div>
+                    <Item label='商品详情'
+                        labelCol={{ span: 2 }}
+                        wrapperCol={{ span: 20 }} >
+                        <RichTextEditor ref={this.editor} detail={detail}></RichTextEditor>
                     </Item>
                     <Item>
                         <Button type='primary' onClick={this.submit}>提交</Button>

@@ -26,7 +26,7 @@ export default class PicturesWall extends Component {
 
         let fileList = []
         //如果传入imgs属性，根据imgs显示
-        const { imgs } = this.props
+        const imgs = this.props.imgs || []
         console.log(imgs)
         if (imgs || imgs.length > 0) {
             fileList = imgs.map((img, index) => ({
@@ -102,11 +102,11 @@ export default class PicturesWall extends Component {
         return (
             <div className="clearfix">
                 <Upload
-                    accept="image/*"
-                    action="/manage/img/upload"
-                    name='image'
+                    accept="image/*" /*接受图片的格式*/
+                    action="/manage/img/upload"  /*上传图片的接口地址*/
+                    name='image'  /*请求的参数名*/
                     listType="picture-card"
-                    fileList={fileList}
+                    fileList={fileList}  /*所有已上传图片的数组*/
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
                 >

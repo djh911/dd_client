@@ -22,6 +22,7 @@ export default function ajax(url,data = {},type='GET') {
             })
             
         }else{
+            console.log(data)
             promise = axios.post(url,data)
         }
         //2.如果成功，执行resolve(value)

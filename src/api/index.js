@@ -73,3 +73,18 @@ export const reqUpdateStatus = (productId,status) => ajax('/manage/product/updat
 
 //10.删除商品图片
 export const reqDeleteImg = (name) => ajax('/manage/img/delete',{name},'POST')
+
+//11.添加商品s
+export const reqAddProduct = (product) => ajax('/manage/product/add',product,'POST')
+
+//12.更新商品
+export const reqUpdateProduct = (product) => ajax('/manage/product/update',product,'POST')
+
+//13.获取所有角色的列表
+export const reqGetRoles = () => ajax('/manage/role/list')
+
+//14.添加角色
+export const reqAddRole = (roleName) =>ajax('/manage/role/add',{roleName},'POST')
+
+//15.更新角色
+export const reqUpdateRole = (role) => ajax('/manage/role/update',role,'POST')

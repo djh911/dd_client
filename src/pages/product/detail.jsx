@@ -38,8 +38,9 @@ export default class ProductDetails extends Component {
 
             //一次性发多个请求
             const results = await Promise.all([reqCategory(pCategoryId), reqCategory(categoryId)])
-            const cName1 = results[0].data.name
-            const cName2 = results[1].data.name
+            console.log(results)
+            const cName1 = results[0].data.name || ''
+            const cName2 = results[1].data.name || ''
 
 
             this.setState({
@@ -54,7 +55,7 @@ export default class ProductDetails extends Component {
 
     render() {
 
-        const { name, price, desc, details, imgs } = this.props.location.state.product
+        const { name, price, desc, detail, imgs } = this.props.location.state.product
         const { cName1, cName2 } = this.state
 
         const title = (
@@ -70,27 +71,25 @@ export default class ProductDetails extends Component {
 
         return (
             <Card title={title} className='product-details'>
-                <List>
+                <List grid={{column:1}}>
                     <Item>
                         <span className='left'>商品名称:</span>
-                        {name}
+                       <span> {name}</span>
                     </Item>
                     <Item>
                         <span className='left' >商品描述:</span>
-                        <span>{desc}</span>
+                        <span style={{display: 'inline-block',width:800}}>{desc}</span>
                     </Item>
                     <Item>
                         <span className='left'>商品价格:</span>
-                        {price}元
+                        <span>{price}元</span>
                     </Item>
                     <Item>
                         <span className='left'>所属分类:</span>
-                        {cName1}{cName2 ? ' ---> ' + cName2 : ''}
+                        <span>{cName1}{cName2 ? ' ---> ' + cName2 : ''}</span>
                     </Item>
                     <Item >
                         <span className='left'>商品图片:</span>
-                        <img className='product-img' src={miPic} alt="mi10" />
-                        <img className='product-img' src={miPic2} alt="mi10" />
                         {
                             imgs.map(img => <img className='product-img' src={BASE_IMG_URL + img} alt="img" key={img} />)
 
@@ -99,7 +98,7 @@ export default class ProductDetails extends Component {
                     </Item>
                     <Item>
                         <span className='left'>商品详情:</span>
-                        <span dangerouslySetInnerHTML={{ __html: details }}></span>
+                        <span dangerouslySetInnerHTML={{ __html: detail }} style={{display: 'inline-block',width:800}}></span>
                     </Item>
                 </List>
 

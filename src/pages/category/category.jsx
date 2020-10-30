@@ -116,10 +116,10 @@ export default class Category extends Component {
     //添加分类
     addCategory = () => {
 
-        this.form.validateFields( async (err, values) => {
+        this.form.validateFields(async (err, values) => {
             if (!err) {
                 //1.隐藏对话框
-               // console.log('表单验证成功')
+                // console.log('表单验证成功')
                 this.setState({
                     showStatus: 0
                 })
