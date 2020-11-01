@@ -64,7 +64,6 @@ export default class ProductHome extends Component {
                 }
             },
         ]
-
     }
 
     //更新指定商品的状态
@@ -90,10 +89,7 @@ export default class ProductHome extends Component {
             result = await reqSearchProducts({pageNum,pageSize:PAGE_SIZE,searchContent,searchType})
         }else{
             result = await reqProducts(pageNum, PAGE_SIZE)
-
         }
-       
-
         this.setState({
             loading: false
         })
@@ -104,10 +100,7 @@ export default class ProductHome extends Component {
                 total,
                 products:list
             })
-
-
         }
-
     }
 
 
@@ -118,19 +111,15 @@ export default class ProductHome extends Component {
 
     componentDidMount() {
         this.getProducts(1)
-
     }
 
     render() {
-
         const { products, total, loading, searchType, searchContent } = this.state
-
         const title = (
             <span>
                 <Select style={{ width: 150 }} value={searchType} onChange={value => this.setState({ searchType: value })}>
                     <Option value='searchName'>按名称搜索</Option>
                     <Option value='searchDesc'>按描述搜索</Option>
-
                 </Select>
                 <Input
                     placeholder='keywords'
@@ -149,10 +138,7 @@ export default class ProductHome extends Component {
         )
 
         const dataSource = products
-
         const columns = this.columns
-
-
         return (
             <Card title={title} extra={extra}>
                 <Table
@@ -161,16 +147,13 @@ export default class ProductHome extends Component {
                     loading={loading}
                     rowKey='_id'
                     pagination={{
+                        current: this.pageNum,
                         defaultPageSize: PAGE_SIZE,
                         total,
                         showQuickJumper: true,
                         onChange: this.getProducts
                     }}
-
                 />
-
-
-
             </Card>
         )
     }

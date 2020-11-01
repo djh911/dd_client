@@ -7,6 +7,8 @@ import AddForm from './add-form'
 import AuthForm from './auth-form'
 import MemoryUtils from '../../utils/memoryUtils'
 import {formateDate} from '../../utils/dateUtils'
+import memoryUtils from "../../utils/memoryUtils"
+import storageUtils from "../../utils/storageUtils"
 
 
 export default class Role extends Component {
@@ -109,12 +111,21 @@ export default class Role extends Component {
         const menus = this.auth.current.getMenus()
         role.menus = menus
         role.auth_name = MemoryUtils.user.username
-        console.log(role)
+        //console.log(role)
         //请求更新
         const result = await reqUpdateRole(role)
         if (result.status === 0) {
-            message.success('更新成功')
-            this.getRoleLists()
+            //如果更新的是自己角色的权限，则强制退出
+            if(role._id === memoryUtils.user.role_id) {
+                memoryUtils.user = {}
+                storageUtils.deleteUser()
+                this.props.history.replace('/login')
+                message.success('当前用户角色权限修改了，请重新登录')
+            } else {
+                message.success('更新成功')
+                this.getRoleLists()
+            }
+
         } else {
             message.error('添加失败')
         }
@@ -153,7 +164,15 @@ export default class Role extends Component {
                         defaultPageSize: PAGE_SIZE,
                         showQuickJumper: true,
                     }}
-                    rowSelection={{ type: 'radio', selectedRowKeys: [role._id] }}
+                    rowSelection={{
+                        type: 'radio',
+                        selectedRowKeys: [role._id] ,
+                        onSelect: (role) => { // 选择某个radio时回调
+                            this.setState({
+                                role
+                            })
+                        }
+                    }}
                     onRow={this.onRow}
                 />
 

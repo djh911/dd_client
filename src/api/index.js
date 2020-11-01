@@ -13,8 +13,8 @@ const BaseUrl = ''
 //1.登录请求函数
 export const reqLogin = (username, password) => ajax(BaseUrl + '/login', { username, password }, 'POST')
 
-//2.添加用户
-export const reqAddUser = (user) => ajax(BaseUrl + '/manage/user/add', user, 'POST')
+//2.添加/更新用户
+export const reqAddOrUpdateUser = (user) => ajax(BaseUrl + '/manage/user/'+(user._id ? 'update' : 'add'), user, 'POST')
 
 //jsonp请求的接口请求函数
 export const reqWeather = (city) => {
@@ -65,6 +65,7 @@ export const reqSearchProducts = ({ pageNum, pageSize, searchContent, searchType
 
     })
 }
+
 //8.获取一个分类
 export const reqCategory = (categoryId) => ajax('/manage/category/info',{categoryId})
 
@@ -88,3 +89,10 @@ export const reqAddRole = (roleName) =>ajax('/manage/role/add',{roleName},'POST'
 
 //15.更新角色
 export const reqUpdateRole = (role) => ajax('/manage/role/update',role,'POST')
+
+//16.获取用户列表
+export const reqUserList = () => ajax('/manage/user/list')
+
+//17.删除指定用户
+export const reqDeleteUser = (userId) => ajax('/manage/user/delete',{userId},'POST')
+
